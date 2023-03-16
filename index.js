@@ -1,11 +1,9 @@
 const express = require('express');
-const axios = require('axios');
-const { v4: uuid } = require("uuid");
 const videoRoutes = require('./routes/video.js');
 const cors = require('cors');
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 app.use(express.json());
 app.use(cors());

@@ -1,7 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const videoData = require('../data/videos.json');
-const uuid = require("uuid");
+const { v4: uuid } = require("uuid");
+const fs = require("fs");
+
+// POST VIDEO
+function postVideo(data) {
+  const stringifiedData = JSON.stringify(data);
+  fs.writeFileSync('./data/videos.json', stringifiedData);
+}
+
+// READ VIDEO
+function readVideos() {
+  const treesFile = fs.readFileSync("./data/videos.json");
+  const treesData = JSON.parse(treesFile);
+  return treesData;
+}
 
 router.get('/', (req, res) => {
     const videoList = videoData.map(video => {
@@ -26,15 +40,21 @@ router.get('/:id', (req, res) => {
     }
 });
 
+//POST
 router.post('/', (req, res) => {
+  const videoData = readVideos();
     const newVideo = {
       id: uuid(),
       title: req.body.title,
+      description: req.body.description,
       channel: req.body.channel,
-      image: req.body.image
+      image: req.body.image,
+      comments: req.body.comments
     }
     videoData.push(newVideo);
-    res.status(201).json(videoData)
+    res.status(201).json(videoData);
+    postVideo(videoData);
+
   })
 
 module.exports = router
