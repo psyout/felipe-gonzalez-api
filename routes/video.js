@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const videoData = require('../data/videos.json');
 const { v4: uuid } = require("uuid");
 const fs = require("fs");
 
@@ -12,13 +11,14 @@ function postVideo(data) {
 
 // READ VIDEO
 function readVideos() {
-  const treesFile = fs.readFileSync("./data/videos.json");
-  const treesData = JSON.parse(treesFile);
-  return treesData;
+  const videosFile = fs.readFileSync("./data/videos.json");
+  const videosData = JSON.parse(videosFile);
+  return videosData;
 }
 
 router.get('/', (req, res) => {
-    const videoList = videoData.map(video => {
+    const videosData = readVideos();
+    const videoList = videosData.map(video => {
       return {
         id: video.id,
         title: video.title,
@@ -31,10 +31,11 @@ router.get('/', (req, res) => {
   });
 
 router.get('/:id', (req, res) => {
+  const videosData = readVideos();
     const id = req.params.id;
-    const video = videoData.find((video) => video.id === id);
+    const video = videosData.find((video) => video.id === id);
     if (video){
-        res.json(video);
+        res.status(201).json(video);
     } else {
         res.status(404).send('Video not found')
     }
@@ -42,7 +43,7 @@ router.get('/:id', (req, res) => {
 
 //POST
 router.post('/', (req, res) => {
-  const videoData = readVideos();
+  const videosData = readVideos();
     const newVideo = {
       id: uuid(),
       title: req.body.title,
@@ -51,9 +52,9 @@ router.post('/', (req, res) => {
       image: req.body.image,
       comments: req.body.comments
     }
-    videoData.push(newVideo);
-    res.status(201).json(videoData);
-    postVideo(videoData);
+    videosData.push(newVideo);
+    res.status(201).json(videosData);
+    postVideo(videosData);
 
   })
 
