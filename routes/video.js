@@ -49,9 +49,13 @@ router.post('/', (req, res) => {
       title: req.body.title,
       description: req.body.description,
       channel: req.body.channel,
-      image: req.body.image,
-      comments: req.body.comments
+      image: 'https://picsum.photos/2000/1000',
+      comments: req.body.comments,
+      timestamp: req.body.timestamp,
+      likes: req.body.likes,
+      views: req.body.views
     }
+    console.log(newVideo);
     videosData.push(newVideo);
     res.status(201).json(videosData);
     postVideo(videosData);
