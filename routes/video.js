@@ -44,6 +44,8 @@ router.get('/:id', (req, res) => {
 //POST
 router.post('/', (req, res) => {
   const videosData = readVideos();
+  const randomLikes = Math.floor(Math.random() * 1000);
+  const randomViews = Math.floor(Math.random() * 2000);
     const newVideo = {
       id: uuid(),
       title: req.body.title,
@@ -52,8 +54,8 @@ router.post('/', (req, res) => {
       image: 'https://picsum.photos/2000/1000',
       comments: req.body.comments,
       timestamp: req.body.timestamp,
-      likes: req.body.likes,
-      views: req.body.views
+      likes: randomLikes,
+      views: randomViews
     }
     console.log(newVideo);
     videosData.push(newVideo);
